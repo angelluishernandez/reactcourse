@@ -1,6 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
+import "normalize.css";
 import "./App.css";
+import "./Styles/styles.scss";
 import IndecisionApp from "./components/IndecisionApp";
 
 function App() {

@@ -5,6 +5,7 @@ import Header from "./Header";
 import Action from "./Action";
 import Options from "./Options";
 import AddOption from "./AddOption";
+import OptionModal from "./OptionModal";
 
 class IndecisionApp extends React.Component {
 	constructor(props) {
@@ -13,8 +14,10 @@ class IndecisionApp extends React.Component {
 		this.handlePick = this.handlePick.bind(this);
 		this.handleAddOption = this.handleAddOption.bind(this);
 		this.handleDeleteOption = this.handleDeleteOption.bind(this);
+		this.handleModalClose = this.handleModalClose.bind(this);
 		this.state = {
 			options: [],
+			selectedOption: undefined,
 		};
 	}
 
@@ -60,7 +63,9 @@ class IndecisionApp extends React.Component {
 	handlePick() {
 		const randomNum = Math.floor(Math.random() * this.state.options.length);
 		const option = this.state.options[randomNum];
-		alert(option);
+		this.setState({
+			selectedOption: option,
+		});
 	}
 	handleAddOption(option) {
 		if (!option) {
@@ -73,23 +78,40 @@ class IndecisionApp extends React.Component {
 			options: prevState.options.concat(option),
 		}));
 	}
+
+	// Handle modal close
+	handleModalClose(event) {
+		this.setState(() => ({
+			selectedOption: undefined,
+		}));
+	}
+
 	render() {
 		const title = "Indecision";
 		const subtitle = "Put your life in the hands of a computer";
 
 		return (
-			<div>
+			<div className="IndecisionApp">
 				<Header title={title} subtitle={subtitle} />
-				{/* <Action
-					hasOptions={this.state.options.length >= 0}
-					handlePick={this.handlePick}
-				/> */}
-				<Options
-					options={this.state.options}
-					handleDeleteOptions={this.handleDeleteOptions}
-					handleDeleteOption={this.handleDeleteOption}
+				<div className="container container__body">
+					<Action
+						hasOptions={this.state.options.length >= 0}
+						handlePick={this.handlePick}
+					/>
+					<div className="widget">
+
+					<Options
+						options={this.state.options}
+						handleDeleteOptions={this.handleDeleteOptions}
+						handleDeleteOption={this.handleDeleteOption}
+					/>
+					<AddOption handleAddOption={this.handleAddOption} />
+					</div>
+				</div>
+				<OptionModal
+					selectedOption={this.state.selectedOption}
+					handleModalClose={this.handleModalClose}
 				/>
-				<AddOption handleAddOption={this.handleAddOption} />
 			</div>
 		);
 	}
